@@ -2,11 +2,11 @@
 nixPkgs = [
     'python39',
     'python39-pip',
-    'python39-dev',
+    'python39.dev',
     'gcc',
-    'libpq-dev',
-    'python3-dev',
-    'musl-dev'
+    'postgresql',  # This provides libpq
+    'python3.dev',
+    'musl'
 ]
 
 [phases.install]
