@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: train-booking-app
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.18
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: train_booking_db
+          property: connectionString
+      - key: FLASK_APP
+        value: "app.py"
+      - key: FLASK_ENV
+        value: "production"
+
+databases:
+  - name: train_booking_db
+    databaseName: train_booking
+    user: train_booking_user
+    plan: free

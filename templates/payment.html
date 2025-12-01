@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}Payment - BlueRail{% endblock %}
+{% block content %}
+<h2 style="margin-bottom: 1.5rem;">Complete Payment</h2>
+<div class="grid">
+  <div>
+    <div class="card">
+      <h3>Booking Summary</h3>
+      <div style="margin-top: 1rem;">
+        <p class="small" style="margin-bottom: 0.75rem;">
+          <strong>Train:</strong><br>
+          {{ booking.train.name }} • {{ booking.train.number }}
+        </p>
+        <p class="small" style="margin-bottom: 0.75rem;">
+          <strong>Route:</strong><br>
+          {{ booking.train.from_station }} → {{ booking.train.to_station }}
+        </p>
+        <p class="small" style="margin-bottom: 0.75rem;">
+          <strong>Travel Date:</strong><br>
+          {{ booking.travel_date.strftime('%B %d, %Y') if booking.travel_date else 'N/A' }}
+        </p>
+        <p class="small" style="margin-bottom: 0.75rem;">
+          <strong>Passenger:</strong><br>
+          {{ booking.passenger_name }} ({{ booking.passenger_age }} years, {{ booking.passenger_gender }})
+        </p>
+        <p class="small" style="margin-bottom: 0.75rem;">
+          <strong>Class:</strong><br>
+          {{ booking.seat_class }}
+        </p>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid var(--border);">
+          <p style="font-size: 1.5rem; font-weight: 800; color: var(--primary-dark);">
+            Total Amount: ₹ {{ "%.2f"|format(booking.fare) }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h3>Payment Details</h3>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-row">
+          {{ form.card_name.label }}
+          {{ form.card_name(class_='input', placeholder='Name as on card', autocomplete='cc-name', required=True) }}
+          {% if form.card_name.errors %}
+            <div class="form-errors">
+              {% for error in form.card_name.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          {{ form.card_number.label }}
+          {{ form.card_number(class_='input', placeholder='1234 5678 9012 3456', autocomplete='cc-number', maxlength='19', required=True) }}
+          {% if form.card_number.errors %}
+            <div class="form-errors">
+              {% for error in form.card_number.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+          <div class="form-row">
+            {{ form.expiry.label }}
+            {{ form.expiry(class_='input', placeholder='MM/YY', autocomplete='cc-exp', maxlength='5', required=True) }}
+            {% if form.expiry.errors %}
+              <div class="form-errors">
+                {% for error in form.expiry.errors %}
+                  <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="form-row">
+            {{ form.cvv.label }}
+            {{ form.cvv(class_='input', placeholder='CVV', autocomplete='cc-csc', maxlength='4', required=True) }}
+            {% if form.cvv.errors %}
+              <div class="form-errors">
+                {% for error in form.cvv.errors %}
+                  <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          {{ form.submit(class_='btn btn-primary', style='width: 100%; font-size: 1.1rem; padding: 1rem;') }}
+        </div>
+      </form>
+      
+      <div style="margin-top: 1rem; padding: 1rem; background: var(--muted); border-radius: var(--radius-sm);" class="small">
+        <strong>🔒 Secure Payment:</strong> This is a demo application. No real card processing is performed. In production, this would integrate with a secure payment gateway.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Format card number input
+  document.addEventListener('DOMContentLoaded', function() {
+    const cardNumber = document.querySelector('input[name="card_number"]');
+    if (cardNumber) {
+      cardNumber.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\s+/g, '');
+        value = value.replace(/(.{4})/g, '$1 ').trim();
+        e.target.value = value;
+      });
+    }
+
+    // Format expiry input
+    const expiry = document.querySelector('input[name="expiry"]');
+    if (expiry) {
+      expiry.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+          value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        e.target.value = value;
+      });
+    }
+  });
+</script>
+{% endblock %}

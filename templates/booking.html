@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Book Ticket - BlueRail{% endblock %}
+{% block content %}
+<h2 style="margin-bottom: 1.5rem;">Book Your Ticket</h2>
+<div class="grid">
+  <div>
+    <div class="card">
+      <h3>Available Trains</h3>
+      {% if trains %}
+        {% for t in trains %}
+        <div class="train-card">
+          <div class="train-info">
+            <div style="font-weight: 800; color: var(--primary-dark);">{{ t.name }} • {{ t.number }}</div>
+            <div class="train-meta">{{ t.from_station }} → {{ t.to_station }} • {{ t.duration }}</div>
+            <div class="small">Departure: {{ t.depart }} — Arrival: {{ t.arrive }}</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="price">₹ {{ "%.2f"|format(t.fare) }}</div>
+            <div style="margin-top: 0.5rem;">
+              <button type="button" onclick="document.getElementById('train_id').value='{{ t.id }}'; document.getElementById('train_id').focus();" class="btn btn-outline">Select</button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="small">No trains available at the moment. Please check back later.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h3 id="booking-form">Passenger Details</h3>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-row">
+          {{ form.train_id.label }}
+          {{ form.train_id(id='train_id', class_='input') }}
+          {% if form.train_id.errors %}
+            <div class="form-errors">
+              {% for error in form.train_id.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          {{ form.passenger_name.label }}
+          {{ form.passenger_name(class_='input', placeholder='Enter passenger full name', autocomplete='name', required=True) }}
+          {% if form.passenger_name.errors %}
+            <div class="form-errors">
+              {% for error in form.passenger_name.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          {{ form.passenger_age.label }}
+          {{ form.passenger_age(class_='input', placeholder='Age', type='number', min='1', max='120', required=True) }}
+          {% if form.passenger_age.errors %}
+            <div class="form-errors">
+              {% for error in form.passenger_age.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          {{ form.passenger_gender.label }}
+          {{ form.passenger_gender(class_='input') }}
+          {% if form.passenger_gender.errors %}
+            <div class="form-errors">
+              {% for error in form.passenger_gender.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          {{ form.travel_date.label }}
+          {{ form.travel_date(class_='input', type='date', min=form.travel_date.data.strftime('%Y-%m-%d') if form.travel_date.data else '', required=True) }}
+          {% if form.travel_date.errors %}
+            <div class="form-errors">
+              {% for error in form.travel_date.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          {{ form.seat_class.label }}
+          {{ form.seat_class(class_='input') }}
+          {% if form.seat_class.errors %}
+            <div class="form-errors">
+              {% for error in form.seat_class.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          {{ form.submit(class_='btn btn-primary', style='width: 100%') }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Set minimum date to today
+  document.addEventListener('DOMContentLoaded', function() {
+    const travelDateInput = document.querySelector('input[type="date"]');
+    if (travelDateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      travelDateInput.setAttribute('min', today);
+    }
+  });
+</script>
+{% endblock %}

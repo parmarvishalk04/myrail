@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Ticket - BlueRail{% endblock %}
+{% block content %}
+<div class="ticket">
+  <div style="text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--border);">
+    <h1 style="font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); margin: 0;">BlueRail</h1>
+    <div class="small" style="margin-top: 0.5rem;">Electronic Ticket Confirmation</div>
+  </div>
+
+  <div class="row" style="border-bottom: 2px solid var(--primary); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+    <div>
+      <div style="font-weight: 900; font-size: 1.5rem; color: var(--primary-dark); margin-bottom: 0.5rem;">
+        {{ booking.train.name }}
+      </div>
+      <div style="font-weight: 700; color: var(--text); margin-bottom: 0.25rem;">Train No: {{ booking.train.number }}</div>
+      <div class="small">{{ booking.train.from_station }} → {{ booking.train.to_station }}</div>
+      <div class="small" style="margin-top: 0.5rem;">
+        Departure: {{ booking.train.depart }} | Arrival: {{ booking.train.arrive }} | Duration: {{ booking.train.duration }}
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <span class="badge" style="font-size: 1rem; padding: 0.75rem 1.25rem; margin-bottom: 0.75rem; display: inline-block;">
+        {{ booking.seat_class }}
+      </span>
+      <div style="font-weight: 700; color: var(--primary-dark);">Travel Date</div>
+      <div style="font-size: 1.1rem; font-weight: 700;">
+        {{ booking.travel_date.strftime('%B %d, %Y') if booking.travel_date else 'N/A' }}
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="background: var(--muted); padding: 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+    <div>
+      <div class="small" style="font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; color: var(--text-muted);">Passenger Details</div>
+      <div style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">{{ booking.passenger_name }}</div>
+      <div class="small">Age: {{ booking.passenger_age }} years • {{ booking.passenger_gender }}</div>
+    </div>
+    <div style="text-align: right;">
+      <div class="small" style="font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; color: var(--text-muted);">Fare</div>
+      <div style="font-weight: 900; font-size: 1.75rem; color: var(--primary-dark);">₹ {{ "%.2f"|format(booking.fare) }}</div>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 1rem; border-top: 1px dashed var(--border);">
+    <div>
+      <div class="small" style="margin-bottom: 0.25rem;">
+        <strong>Booking ID:</strong> #{{ booking.id }}
+      </div>
+      <div class="small" style="margin-bottom: 0.25rem;">
+        <strong>Transaction ID:</strong> {{ booking.transaction_id or 'N/A' }}
+      </div>
+      {% if booking.paid_at %}
+      <div class="small" style="margin-bottom: 0.25rem;">
+        <strong>Payment Date:</strong> {{ booking.paid_at.strftime('%B %d, %Y at %I:%M %p') if booking.paid_at else 'N/A' }}
+      </div>
+      {% endif %}
+      <div class="small">
+        <strong>Booked by:</strong> {{ booking.user.name }} ({{ booking.user.email }})
+      </div>
+    </div>
+    <div style="text-align: right;">
+      {% if booking.paid %}
+        <span class="badge success" style="display: inline-block; margin-bottom: 1rem;">✓ Confirmed</span>
+      {% else %}
+        <span class="badge warning" style="display: inline-block; margin-bottom: 1rem;">Pending Payment</span>
+      {% endif %}
+      <div>
+        <button onclick="window.print()" class="btn btn-primary" style="margin-bottom: 0.5rem;">🖨️ Print Ticket</button>
+        <br>
+        <a href="{{ url_for('profile') }}" class="btn btn-outline" style="font-size: 0.875rem; padding: 0.5rem 1rem;">Back to Profile</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px dashed var(--border); text-align: center;">
+    <div class="small" style="color: var(--text-muted);">
+      Please arrive at least 30 minutes before departure time.<br>
+      Keep this ticket and a valid ID proof for verification.<br>
+      For assistance, contact our support team.
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}Home - BlueRail - Fast, Secure Train Booking{% endblock %}
+{% block content %}
+<div class="hero">
+  <div class="left">
+    <h1 style="font-size: 3rem; line-height: 1.2; margin-bottom: 1rem;">
+      Journey Made Simple<br>
+      <span style="color: var(--primary);">Book with Confidence</span>
+    </h1>
+    <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.7;">
+      Experience seamless train booking with BlueRail. Fast, secure, and reliable ticket booking at your fingertips. Your journey begins here.
+    </p>
+    <div class="cta">
+      {% if not current_user.is_authenticated %}
+        <a class="btn btn-primary" href="{{ url_for('register') }}" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          <span style="margin-right: 8px;">🚀</span> Get Started
+        </a>
+        <a class="btn btn-outline" href="{{ url_for('login') }}" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          <span style="margin-right: 8px;">🔑</span> Sign In
+        </a>
+      {% else %}
+        <a class="btn btn-primary" href="{{ url_for('booking') }}" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          <span style="margin-right: 8px;">🎫</span> Book Ticket Now
+        </a>
+        <a class="btn btn-outline" href="{{ url_for('profile') }}" style="font-size: 1.1rem; padding: 1rem 2rem;">
+          <span style="margin-right: 8px;">👤</span> View Profile
+        </a>
+      {% endif %}
+    </div>
+    <div style="margin-top: 2rem; display: flex; gap: 2rem; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.5rem;">✓</span>
+        <span class="small" style="font-weight: 600;">Secure Booking</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.5rem;">⚡</span>
+        <span class="small" style="font-weight: 600;">Instant Confirmation</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.5rem;">🛡️</span>
+        <span class="small" style="font-weight: 600;">100% Secure</span>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div style="position: relative; width: 100%; max-width: 500px;">
+      <img src="{{ url_for('static', filename='img/hero_train.jpeg') }}" alt="Modern train" style="width: 100%; border-radius: var(--radius); box-shadow: 0 20px 60px var(--shadow-lg);" onerror="this.style.display='none'">
+      <div style="position: absolute; top: -10px; right: -10px; background: var(--primary); color: white; padding: 1rem; border-radius: 50%; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 30px rgba(30, 136, 229, 0.4); animation: pulse 2s infinite;">
+        🚂
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem;">
+  <div class="card feature-card" style="border-left: 4px solid var(--primary);">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+    <h3 style="margin: 0 0 0.75rem 0; color: var(--primary-dark);">Search Trains</h3>
+    <p class="small" style="line-height: 1.6; margin: 0;">
+      Find trains between stations with real-time availability, schedules, and competitive fares. Search in seconds, book in minutes.
+    </p>
+  </div>
+  
+  <div class="card feature-card" style="border-left: 4px solid var(--success);">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">💳</div>
+    <h3 style="margin: 0 0 0.75rem 0; color: var(--success);">Secure Checkout</h3>
+    <p class="small" style="line-height: 1.6; margin: 0;">
+      Bank-level encryption ensures your payment details are safe. Multiple payment options available for your convenience.
+    </p>
+  </div>
+  
+  <div class="card feature-card" style="border-left: 4px solid var(--secondary);">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🎫</div>
+    <h3 style="margin: 0 0 0.75rem 0; color: var(--secondary);">Printable Tickets</h3>
+    <p class="small" style="line-height: 1.6; margin: 0;">
+      Beautiful, print-optimized e-tickets delivered instantly. Show on your phone or print for your journey.
+    </p>
+  </div>
+</div>
+
+<style>
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 10px 30px rgba(30, 136, 229, 0.4);
+    }
+    50% {
+      transform: scale(1.1);
+      box-shadow: 0 15px 40px rgba(30, 136, 229, 0.6);
+    }
+  }
+
+  .feature-card {
+    transition: var(--transition);
+    cursor: default;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px var(--shadow-lg);
+  }
+
+  .feature-card:hover > div:first-child {
+    animation: bounce 0.6s ease;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+</style>
+{% endblock %}

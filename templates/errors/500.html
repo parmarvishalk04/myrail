@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Server Error - BlueRail{% endblock %}
+{% block content %}
+<div style="text-align: center; padding: 4rem 2rem;">
+  <h1 style="font-size: 6rem; font-weight: 800; color: var(--danger); margin: 0;">500</h1>
+  <h2 style="font-size: 2rem; margin: 1rem 0; color: var(--text);">Internal Server Error</h2>
+  <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem;">
+    Something went wrong on our end. We're working to fix it. Please try again later.
+  </p>
+  <a href="{{ url_for('index') }}" class="btn btn-primary">Go to Homepage</a>
+</div>
+{% endblock %}
+

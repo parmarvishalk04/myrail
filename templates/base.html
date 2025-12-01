@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Book train tickets quickly and securely with BlueRail">
+  <meta name="author" content="BlueRail">
+  <title>{% block title %}BlueRail - Fast, Secure Train Booking{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="header">
+    <a href="{{ url_for('index') }}" class="logo">
+      <div class="logo-icon">
+        <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="50" height="50" rx="10" fill="rgba(255, 255, 255, 0.15)"/>
+          <path d="M12 28C12 29.1 12.9 30 14 30H36C37.1 30 38 29.1 38 28V22C38 20.9 37.1 20 36 20H14C12.9 20 12 20.9 12 22V28Z" fill="white" opacity="0.9"/>
+          <path d="M10 26L12 24V28L10 26Z" fill="white"/>
+          <path d="M40 26L38 24V28L40 26Z" fill="white"/>
+          <circle cx="16" cy="28" r="2.5" fill="var(--primary-dark)"/>
+          <circle cx="24" cy="28" r="2.5" fill="var(--primary-dark)"/>
+          <circle cx="32" cy="28" r="2.5" fill="var(--primary-dark)"/>
+          <circle cx="20" cy="28" r="1" fill="white"/>
+          <circle cx="28" cy="28" r="1" fill="white"/>
+          <path d="M14 18L18 14H32L36 18H14Z" fill="white" opacity="0.8"/>
+          <line x1="20" y1="14" x2="20" y2="18" stroke="var(--primary)" stroke-width="1.5"/>
+          <line x1="30" y1="14" x2="30" y2="18" stroke="var(--primary)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">
+          <span class="brand-icon">🚂</span>
+          BlueRail
+        </div>
+        <div class="brand-sub">Your Journey, Our Priority</div>
+      </div>
+    </a>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('index') }}" class="nav-link" aria-label="Home">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">Home</span>
+        </a>
+        <a href="{{ url_for('booking') }}" class="nav-link nav-link-primary" aria-label="Book a ticket">
+          <span class="nav-icon">🎫</span>
+          <span class="nav-text">Book Ticket</span>
+        </a>
+        <a href="{{ url_for('profile') }}" class="nav-link" aria-label="View profile">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Profile</span>
+        </a>
+        <a href="{{ url_for('logout') }}" class="nav-link nav-link-danger" aria-label="Logout">
+          <span class="nav-icon">🚪</span>
+          <span class="nav-text">Logout</span>
+        </a>
+      {% else %}
+        <a href="{{ url_for('index') }}" class="nav-link" aria-label="Home">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">Home</span>
+        </a>
+        <a href="{{ url_for('login') }}" class="nav-link" aria-label="Login to your account">
+          <span class="nav-icon">🔑</span>
+          <span class="nav-text">Login</span>
+        </a>
+        <a href="{{ url_for('register') }}" class="nav-link nav-link-primary" aria-label="Create a new account">
+          <span class="nav-icon">✨</span>
+          <span class="nav-text">Register</span>
+        </a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="container" role="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes" role="alert">
+          {% for category, msg in messages %}
+            <div class="flash {{ category }}">
+              <span>{{ msg }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-muted); margin-top: 3rem; border-top: 1px solid var(--border);">
+    <p>&copy; 2024 BlueRail. All rights reserved.</p>
+    <p style="font-size: 0.875rem; margin-top: 0.5rem;">Secure train booking platform</p>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
