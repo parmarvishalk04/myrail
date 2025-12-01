@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = [
+    'python39',
+    'python39-pip',
+    'python39-dev',
+    'gcc',
+    'libpq-dev',
+    'python3-dev',
+    'musl-dev'
+]
+
+[phases.install]
+cmds = [
+    'pip install -r requirements.txt'
+]
+
+[start]
+cmd = "gunicorn --worker-tmp-dir /dev/shm app:app"
